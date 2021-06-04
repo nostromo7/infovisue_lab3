@@ -13,8 +13,8 @@
 </head>
 <body>
 
-<h1>InfoVis UE 2021 - Exercise 2</h1>
-<p>Marko Kadić 12045128</p>
+<h1>InfoVis UE 2021 - Exercise 3</h1>
+<p>Marko Kadić 12045128, Moritz Hübler 1426077</p>
 
 <!-- Container for the map and the label for the selected indicator -->
 <div class="container">
@@ -29,24 +29,8 @@
 
 <script>
     // reads the data from the server using Jinja2
-    let data = {{ data | safe }};
-    let pca_data = {{ pca_data | safe }};
-    let loadings_data = {{ loadings_data | safe }};
-    let idmap = {{ idmap | safe }};
-    let indicators = {{ indicators |safe }};
-    //console.log(data);
-    //console.log(pca_data);
-
-    // calls the world map rendering
-    initMap(data, idmap);
-
-
-    // calls te biplot rendering
-    initBiplot(data, pca_data, loadings_data, idmap, indicators);
-
-
-    // +3 event listeners
-
+    let player = {{ player | safe }};
+    let season_21 = {{ season_21 | safe }};
 </script>
 
 </body>

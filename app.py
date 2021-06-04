@@ -17,31 +17,19 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 @app.route('/')
 def data():
-    # replace this with the real data
-    testData = ["hello", "infovis", "2021"]
+    loc = r'./static/data/'
 
-    loc = './static/data/'
+    map_data = pd.read_csv(loc + r'oecdTable.csv')
 
-    oecd_map = {}
+    player_data = pd.read_csv(loc + r'player data/players_21.csv')
 
-    countries_data = pd.read_csv(loc + 'oecdTable.csv')
+    season_21_data = pd.read_csv(loc + r'English Premier League (football) 10 Seasons/season-2021_csv.csv')
 
-    oecd_map = countries_data.to_dict(orient = 'index')
-
-    #for k in oecd_map:
-    #    pp.pprint(oecd_map[k]['LOCATION'])
-
-    #pp.pprint(countries_data)
-    #pp.pprint(oecd_map)
-    pca_data = []
-
-    (pca_data, loadings_data, idmap, indicators) = createPCA(countries_data)
-
-    pca_map = pca_data.to_dict()
-    loadings_map = loadings_data.to_dict()
+    player_map = player_data.to_dict()
+    season_21_map = season_21_data.to_dict()
 
     # return the index file and the data
-    return render_template("index.html", data=json.dumps(oecd_map), pca_data = json.dumps(pca_map), loadings_data = json.dumps(loadings_map), idmap = json.dumps(idmap), indicators = json.dumps(indicators))
+    return render_template("index.html", player=json.dumps(player_map), season_21=json.dumps(season_21_map))
 
 
 def createPCA(data):
