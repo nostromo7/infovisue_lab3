@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>InfoVis UE 2021</title>
+
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.0/topojson.min.js"></script>
+    <script src="{{url_for('static',filename='js/map.js')}}"></script>
+
+</head>
+<body>
+
+<h1>InfoVis UE 2021 - Exercise 2</h1>
+<p>Marko Kadić 12045128</p>
+
+<!-- Container for the map and the label for the selected indicator -->
+<div class="container">
+    <p id="indicator">&nbsp;</p>
+    <svg id="svg_map"></svg>
+</div>
+<!-- Container for the biplot and the label for the selected country -->
+<div class="container">
+    <p id="country">&nbsp;</p>
+    <svg id="svg_chart"></svg>
+</div>
+
+<script>
+    // reads the data from the server using Jinja2
+    let data = {{ data | safe }};
+    let pca_data = {{ pca_data | safe }};
+    let loadings_data = {{ loadings_data | safe }};
+    let idmap = {{ idmap | safe }};
+    let indicators = {{ indicators |safe }};
+    //console.log(data);
+    //console.log(pca_data);
+
+    // calls the world map rendering
+    initMap(data, idmap);
+
+
+    // calls te biplot rendering
+    initBiplot(data, pca_data, loadings_data, idmap, indicators);
+
+
+    // +3 event listeners
+
+</script>
+
+</body>
+</html>
