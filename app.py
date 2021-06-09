@@ -6,7 +6,10 @@ import numpy as np
 from sklearn.decomposition import PCA
 from sklearn import preprocessing
 import matplotlib.pyplot as plt 
-import matplotlib 
+import matplotlib
+import glob
+import os
+import re
 
 app = Flask(__name__)
 
@@ -18,18 +21,46 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 @app.route('/')
 def data():
     loc = r'./static/data/'
+    seasons_folder = r'D:\Documents\Uni\Master\4. Semester\InfoVis\UE\infovisue_lab3_2021\static\data\English Premier League (football) 10 Seasons'
 
-    map_data = pd.read_csv(loc + r'oecdTable.csv')
+    #TODO: How it should work without absolute paths:
+    #player_data = pd.read_csv(loc + r'player data/players_21.csv')
 
-    player_data = pd.read_csv(loc + r'player data/players_21.csv')
+    player_data = pd.read_csv(r'D:\Documents\Uni\Master\4. Semester\InfoVis\UE\infovisue_lab3_2021\static\data\player data\players_21.csv')
+    standings_data = pd.read_csv(r'D:\Documents\Uni\Master\4. Semester\InfoVis\UE\infovisue_lab3_2021\static\data\English Premier League (football) 10 Seasons\EPLStandings.csv')
 
-    season_21_data = pd.read_csv(loc + r'English Premier League (football) 10 Seasons/season-2021_csv.csv')
+    # Get all filenames of seasons
+    all_season_files = list(glob.iglob(os.path.join(seasons_folder, 'season*.csv')))
+    seasons_map = {
+        "season-0910_csv.csv": "2009/10",
+        "season-1011_csv.csv": "2010/11",
+        "season-1112_csv.csv": "2011/12",
+        "season-1213_csv.csv": "2012/13",
+        "season-1314_csv.csv": "2013/14",
+        "season-1415_csv.csv": "2014/15",
+        "season-1516_csv.csv": "2015/16",
+        "season-1617_csv.csv": "2016/17",
+        "season-1718_csv.csv": "2017/18",
+        "season-1819_csv.csv": "2018/19",
+        "season-1920_csv.csv": "2019/20",
+        "season-2021_csv.csv": "2020/21"
+    }
+    # concat single seasons with additional attribute 'Season'
+    seasons_data = pd.DataFrame()
+    for file in all_season_files:
+        this_season = pd.read_csv(file, parse_dates=True)
+        this_season['Season'] = seasons_map[file.split('\\')[-1]]
+        seasons_data = pd.concat([seasons_data, this_season], ignore_index=True)
+
+    # just take players which play in english clubs
+    english_teams = standings_data['Team']
+    player_data = player_data[player_data['club_name'].isin(english_teams)][['short_name', 'nationality', 'club_name']]
+
 
     player_map = player_data.to_dict()
-    season_21_map = season_21_data.to_dict()
-
+    seasons_map = seasons_data.to_json(orient='index')
     # return the index file and the data
-    return render_template("index.html", player=json.dumps(player_map), season_21=json.dumps(season_21_map))
+    return render_template("index.html", seasons=json.dumps(seasons_map), player=json.dumps(player_map))
 
 
 def createPCA(data):
