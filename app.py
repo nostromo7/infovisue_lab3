@@ -55,12 +55,14 @@ def data():
     # just take players which play in english clubs
     english_teams = standings_data['Team']
     player_data = player_data[player_data['club_name'].isin(english_teams)][['short_name', 'nationality', 'club_name']]
+    player_data = player_data.replace('England', 'United Kingdom')
 
 
-    player_map = player_data.to_dict()
+    player_map = player_data.to_json(orient='index')
+    standings_map = standings_data.to_json(orient='index')
     seasons_map = seasons_data.to_json(orient='index')
     # return the index file and the data
-    return render_template("index.html", seasons=json.dumps(seasons_map), player=json.dumps(player_map))
+    return render_template("index.html", seasons=json.dumps(seasons_map), player=json.dumps(player_map), standings=json.dumps(standings_map))
 
 
 def createPCA(data):

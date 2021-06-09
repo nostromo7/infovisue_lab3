@@ -15,6 +15,16 @@ body {
     font-size: large;
 }
 
-.seasons {
-    width: 80px;
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    display: flex;
+    flex-direction: row;
+}
+
+select {
+    width: 140px;
 }

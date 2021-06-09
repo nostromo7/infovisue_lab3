@@ -1,6 +1,21 @@
 const mapWidth = 800;
 const mapHeight = 500;
 
+selectedSeason = '2009/10';
+selectedTeam = 'Arsenal';
+
+let highlight = function(code) {
+    d3.select('path#' + code.split(" ").join("_"))
+        .attr('fill', 'CadetBlue')
+        .attr('stroke-width', 2);
+}
+
+let undoHighlight = function(code) {
+    d3.select('path#' + code.split(" ").join("_"))
+        .attr('fill', 'white')
+        .attr('stroke-width', 0.5);
+}
+
 function initMap() {
 
     // loads the world map as topojson
@@ -28,7 +43,7 @@ function initMap() {
             .selectAll('path')
             .data(mapData)
             .enter().append('path')
-            .attr('id', function(d) {return d.properties.admin})
+            .attr('id', function(d) {return d.properties.admin.split(" ").join("_")})
             .attr('d', path)
             .attr('stroke', 'black')
             .attr('stroke-width', 0.5)
@@ -41,8 +56,9 @@ function initSeasons(seasons) {
 
     seasons_values = [...new Set(seasons.map(e => e.Season))];
 
-    function updateSelection(season) {
-        console.log(season)
+    function updateSeason(season) {
+        console.log(season);
+        selectedSeason = season;
     }
 
     d3.select('#seasons').selectAll('myOptions')
@@ -55,8 +71,63 @@ function initSeasons(seasons) {
 
     d3.select('#seasons')
         .on('change', function(d) {
-            updateSelection(d3.select(this).property('value'))
+            updateSeason(d3.select(this).property('value'));
         });
 
+
+}
+
+function initTeams(standings) {
+    standings = Object.values(JSON.parse(standings));
+    teams = standings.map(e => e.Team)
+
+    function updateTeam(team) {
+        console.log(team);
+        selectedTeam = team;
+        d3.select('#players').selectAll('li')
+        .data(players_sub).enter()
+        .append('li')
+        .text(function(d) {
+            console.log(d);
+            return d.short_name
+        })
+    }
+
+
+    d3.select('#teams').selectAll('myOptions')
+        .data(teams).enter()
+        .append('option')
+            .text(function(d) {return d})
+            .attr('value', function(d) {
+                return d
+            });
+
+    d3.select('#teams')
+        .on('change', function(d) {
+            updateTeam(d3.select(this).property('value'));
+        });
+
+
+}
+
+function initPlayers(player) {
+    players = Object.values(JSON.parse(player));
+    console.log(players)
+
+    players_sub = players.filter(p => p.club_name === selectedTeam)
+
+    d3.select('#players').selectAll('li')
+        .data(players_sub).enter()
+        .append('li')
+        .text(function(d) {
+            return d.short_name + ' (' + d.nationality + ')';
+        })
+        .on('mouseover', function(d) {
+            console.log(d)
+            highlight(d.nationality);
+        })
+        .on('mouseout', function(d) {
+            undoHighlight(d.nationality);
+        });
 
 }

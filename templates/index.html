@@ -24,12 +24,20 @@
 <!-- Container for the biplot and the label for the selected country -->
 <div class="container">
     <p id="country">&nbsp;</p>
+    <div id="form-container"></div>
     <form>
-        <label for="seasons">Choose a season:</label>
+        <label for="seasons">Choose a season:&nbsp;&nbsp;</label>
         <select fname="seasons" id="seasons">
-            <option value="2020/2021"></option>
         </select>
     </form>
+    <form>
+        <label for="teams">Choose a team:&nbsp;&nbsp;</label>
+        <select fname="teams" id="teams">
+        </select>
+    </form>
+    <ul id="players">
+
+    </ul>
     <svg id="svg_chart"></svg>
 </div>
 
@@ -37,9 +45,12 @@
     // reads the data from the server using Jinja2
     let player = {{ player | safe }};
     let seasons = {{ seasons | safe }};
+    let standings = {{ standings | safe }};
 
     initMap()
     initSeasons(seasons)
+    initTeams(standings)
+    initPlayers(player)
 </script>
 
 </body>
