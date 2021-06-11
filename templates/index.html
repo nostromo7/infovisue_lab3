@@ -24,21 +24,33 @@
 <!-- Container for the biplot and the label for the selected country -->
 <div class="container">
     <p id="country">&nbsp;</p>
-    <div id="form-container"></div>
-    <form>
-        <label for="seasons">Choose a season:&nbsp;&nbsp;</label>
-        <select fname="seasons" id="seasons">
-        </select>
-    </form>
-    <form>
-        <label for="teams">Choose a team:&nbsp;&nbsp;</label>
-        <select fname="teams" id="teams">
-        </select>
-    </form>
-    <ul id="players">
-
-    </ul>
-    <svg id="svg_chart"></svg>
+    <div class="row-container">
+        <form>
+            <label for="teams">Choose a team:&nbsp;&nbsp;</label>
+            <select fname="teams" id="teams">
+            </select>
+        </form>
+        <form>
+            <label for="seasons">Choose a season:&nbsp;&nbsp;</label>
+            <select fname="seasons" id="seasons">
+            </select>
+        </form>
+    </div>
+    <hr>
+    <div class="row-container">
+        <div class="column-container">
+            <span>Fifa21 player data:</span>
+            <ul id="players"></ul>
+        </div>
+        <div class="column-container">
+            <span>Standings:</span>
+            <ul id="standings"></ul>
+        </div>
+        <div class="column-container">
+            <span>TODO: SVG</span>
+            <svg id="svg_chart"></svg>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -48,8 +60,8 @@
     let standings = {{ standings | safe }};
 
     initMap()
-    initSeasons(seasons)
-    initTeams(standings)
+    initSeasons(seasons, standings)
+    initTeams(standings, player)
     initPlayers(player)
 </script>
 

@@ -15,9 +15,22 @@ body {
     font-size: large;
 }
 
-.form-container {
+form {
+    margin: 20px;
+}
+
+.row-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.column-container {
     display: flex;
     flex-direction: column;
+}
+
+ul {
+    width: 300px;
 }
 
 form {
@@ -27,4 +40,9 @@ form {
 
 select {
     width: 140px;
+}
+
+li {
+    display: flex;
+    align-items: start;
 }
