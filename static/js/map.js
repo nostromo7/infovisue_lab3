@@ -1,10 +1,10 @@
 const mapWidth = 800;
 const mapHeight = 500;
 
-selectedSeason = '2009/10';
-selectedTeam = 'Arsenal';
-
-maxSeason = 2016;
+let selectedSeason = '2016/17';
+let selectedTeam = 'Arsenal';
+let selectedCountries = [];
+const MAX_SEASON = 2016;
 
 //let tooltipPlayer = undefined;
 
@@ -20,11 +20,18 @@ let highlightCountry = function(code) {
 
 let undoHighlightCountry = function(code) {
     d3.select('path#' + countryNameHelper(code))
-        .attr('fill', 'white')
+        .attr('fill', function(d) {
+            if (selectedCountries.includes(d.properties.admin)) {
+                return 'gray';
+            }
+            else {
+                return 'white';
+            }
+        })
         .attr('stroke-width', 0.5);
 }
 
-let highlightPlayers = function(countryCode) {
+const highlightPlayers = function(countryCode) {
     highlightCountry(countryCode)
     d3.selectAll('.player').each(
         function(d) {
@@ -35,7 +42,7 @@ let highlightPlayers = function(countryCode) {
     )
 }
 
-let undoHighlightPlayers = function(countryCode) {
+const undoHighlightPlayers = function(countryCode) {
     undoHighlightCountry(countryCode)
     d3.selectAll('.player').each(
         function(d) {
@@ -44,8 +51,22 @@ let undoHighlightPlayers = function(countryCode) {
     )
 }
 
-function initMap() {
+const paintCountries = function() {
+    d3.select("#svg_map").selectAll('path').each(
+        function(d) {
+            d3.select(this).attr('fill', function(d) {
+                if (selectedCountries.includes(d.properties.admin)) {
+                    return 'gray';
+                }
+                else {
+                    return 'white';
+                }
+            })
+        }
+    );
+}
 
+function initMap() {
     // loads the world map as topojson
     d3.json("../static/data/world-topo.json").then(function (countries) {
 
@@ -75,7 +96,14 @@ function initMap() {
             .attr('d', path)
             .attr('stroke', 'black')
             .attr('stroke-width', 0.5)
-            .attr('fill', 'white')
+            .attr('fill', function(d) {
+                if (selectedCountries.includes(d.properties.admin)) {
+                    return 'gray';
+                }
+                else {
+                    return 'white';
+                }
+            })
             .on('mouseover', function(d) {
                 highlightPlayers(d.properties.admin);
             })
@@ -89,10 +117,11 @@ function initSeasons(seasons, standings) {
     seasons = Object.values(JSON.parse(seasons));
     standings = Object.values(JSON.parse(standings));
 
-    seasons_values = [...new Set(seasons.map(e => e.Season))];
-    seasons_values_sub = seasons_values.filter(e => {
-        return parseInt(e.split('/')[0]) <= maxSeason;
+    const seasons_values = [...new Set(seasons.map(e => e.Season))];
+    let seasons_values_sub = seasons_values.filter(e => {
+        return parseInt(e.split('/')[0]) <= MAX_SEASON;
     });
+    seasons_values_sub = seasons_values_sub.reverse();
 
     d3.select('#seasons').selectAll('myOptions')
         .data(seasons_values_sub).enter()
@@ -109,25 +138,21 @@ function initSeasons(seasons, standings) {
 
 }
 
-
-
 function updateTeam(team) {
     selectedTeam = team;
-    players_sub = players.filter(p => p.club_name === selectedTeam)
+    let players_sub = players.filter(p => p.club_name === selectedTeam);
     players_sub = players_sub.sort(function(a, b) {
         return (a.overall > b.overall) ? -1 : 1;
-    })
-    d3.select('#players').selectAll('*').remove();
+    });
+    selectedCountries = [...new Set(players_sub.map(e => e.nationality))];
+    paintCountries();
 
+    d3.select('#players').selectAll('*').remove();
     let tooltipPlayer = d3.select('body').append('div')
     .attr('class', 'tooltip')
 
-    showTooltip = function(player) {
-        // 'age', 'height_cm', 'weight_kg', 'player_positions', 'overall', 'shooting', 'passing', 'dribbling', 'defending'
-
-
-
-        textbox = tooltipPlayer
+    const showPlayerTooltip = function(player) {
+        const textbox = tooltipPlayer
             .style('visibility', 'visible')
             .style('left', (d3.event.pageX + 20) + 'px')
             .style('top', (d3.event.pageY + 20) + 'px')
@@ -160,7 +185,8 @@ function updateTeam(team) {
                 .text('Defense: ' + player.defending);
         }
         };
-    hideTooltip = function() {
+
+    const hidePlayerTooltip = function() {
         tooltipPlayer.selectAll('text').remove();
         tooltipPlayer.selectAll('hr').remove();
         tooltipPlayer.style('visibility', 'hidden')
@@ -187,12 +213,12 @@ function updateTeam(team) {
         })
         .on('mouseover', function(d) {
             d3.select(this).attr('style', "text-decoration: underline;");
-            showTooltip(d);
+            showPlayerTooltip(d);
             highlightCountry(d.nationality);
         })
         .on('mouseout', function(d) {
             d3.select(this).attr('style', "");
-            hideTooltip();
+            hidePlayerTooltip();
             undoHighlightCountry(d.nationality);
         });
     }
@@ -218,15 +244,17 @@ function updateStandings(standings, seasonSelection) {
 
 function initTeams(standings, player) {
     standings = Object.values(JSON.parse(standings));
-    teams = standings.map(e => e.Team)
     players = Object.values(JSON.parse(player));
+    availableTeams = [...new Set(players.map(e => e.club_name))];
+
+    const teams = standings.map(e => e.Team).filter(e => availableTeams.includes(e));
 
     d3.select('#teams').selectAll('myOptions')
         .data(teams).enter()
         .append('option')
             .text(function(d) {return d})
             .attr('value', function(d) {
-                return d
+                return d;
             });
 
     d3.select('#teams')
@@ -237,9 +265,6 @@ function initTeams(standings, player) {
    updateStandings(standings, selectedSeason);
 }
 
-function initPlayers(player) {
-    players = Object.values(JSON.parse(player));
-
+function initPlayers() {
     updateTeam(selectedTeam)
-    players_sub = players.filter(p => p.club_name === selectedTeam)
 }
