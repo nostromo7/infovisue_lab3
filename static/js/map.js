@@ -6,6 +6,8 @@ selectedTeam = 'Arsenal';
 
 maxSeason = 2016;
 
+//let tooltipPlayer = undefined;
+
 let countryNameHelper = function(name) {
     return name.split(" ").join("_");
 }
@@ -105,13 +107,64 @@ function initSeasons(seasons, standings) {
             updateStandings(standings, d3.select(this).property('value'));
         });
 
-
 }
+
+
 
 function updateTeam(team) {
     selectedTeam = team;
     players_sub = players.filter(p => p.club_name === selectedTeam)
+    players_sub = players_sub.sort(function(a, b) {
+        return (a.overall > b.overall) ? -1 : 1;
+    })
     d3.select('#players').selectAll('*').remove();
+
+    let tooltipPlayer = d3.select('body').append('div')
+    .attr('class', 'tooltip')
+
+    showTooltip = function(player) {
+        // 'age', 'height_cm', 'weight_kg', 'player_positions', 'overall', 'shooting', 'passing', 'dribbling', 'defending'
+
+
+
+        textbox = tooltipPlayer
+            .style('visibility', 'visible')
+            .style('left', (d3.event.pageX + 20) + 'px')
+            .style('top', (d3.event.pageY + 20) + 'px')
+
+        textbox.append('text')
+            .text('Nationality: ' + player.nationality);
+        textbox.append('text')
+            .text('Height: ' + player.height_cm/100 + 'm, Weight: ' + player.weight_kg + 'kg');
+        textbox.append('text')
+            .text(' - - - - - - - - - - - - - - - - - - - ');
+
+        textbox.append('text')
+            .text('Fifa21 Player-Stats:');
+        textbox.append('text')
+            .text('Overall Rating: ' + player.overall);
+        if (!!player.shooting) {
+             textbox.append('text')
+                .text('Shooting: ' + player.shooting);
+        }
+        if (!!player.passing) {
+            textbox.append('text')
+                .text('Passing: ' + player.passing);
+        }
+        if (!!player.dribbling) {
+            textbox.append('text')
+                .text('Dribbling: ' + player.dribbling);
+        }
+        if (!!player.defending) {
+            textbox.append('text')
+                .text('Defense: ' + player.defending);
+        }
+        };
+    hideTooltip = function() {
+        tooltipPlayer.selectAll('text').remove();
+        tooltipPlayer.selectAll('hr').remove();
+        tooltipPlayer.style('visibility', 'hidden')
+    };
 
     if (players_sub.length === 0) {
      d3.select('#players')
@@ -125,21 +178,21 @@ function updateTeam(team) {
         .append('li')
         .attr('id', function(d) {
             return countryNameHelper(d.sofifa_id.toString())})
-        .append('g')
-        .attr("font-family", "'Font Awesome 5 Free'")
-        .attr("font-weight", 900)
-        .text("\uf007")
+        .append('text')
+            .html('<i class="fas fa-male"></i>')
         .append('text')
         .attr('class', 'player')
         .text(function(d) {
-            return d.short_name + ' (' + d.nationality + ')';
+            return d.short_name + ' (Nr. ' + d.team_jersey_number + ')';
         })
         .on('mouseover', function(d) {
-            d3.select(this).attr('style', "text-decoration: underline;")
+            d3.select(this).attr('style', "text-decoration: underline;");
+            showTooltip(d);
             highlightCountry(d.nationality);
         })
         .on('mouseout', function(d) {
-            d3.select(this).attr('style', "")
+            d3.select(this).attr('style', "");
+            hideTooltip();
             undoHighlightCountry(d.nationality);
         });
     }

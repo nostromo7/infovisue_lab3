@@ -54,7 +54,7 @@ def data():
 
     # just take players which play in english clubs
     english_teams = standings_data['Team']
-    player_data = player_data[player_data['club_name'].isin(english_teams)][['sofifa_id', 'short_name', 'nationality', 'club_name']]
+    player_data = player_data[player_data['club_name'].isin(english_teams)][['sofifa_id', 'short_name', 'nationality', 'club_name', 'age', 'height_cm', 'weight_kg', 'player_positions', 'overall', 'shooting', 'passing', 'dribbling', 'defending', 'team_jersey_number']]
     player_data = player_data.replace('England', 'United Kingdom')
 
 
