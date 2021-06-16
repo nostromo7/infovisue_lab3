@@ -45,11 +45,17 @@ def data():
         "season-1920_csv.csv": "2019/20",
         "season-2021_csv.csv": "2020/21"
     }
+    FTR_map = {
+        'H': 1,
+        'D': 0,
+        'A': -1
+    }
     # concat single seasons with additional attribute 'Season'
     seasons_data = pd.DataFrame()
     for file in all_season_files:
         this_season = pd.read_csv(file, parse_dates=True)
         this_season['Season'] = seasons_map[file.split('\\')[-1]]
+        this_season['FTR'] = this_season['FTR'].map(FTR_map)
         seasons_data = pd.concat([seasons_data, this_season], ignore_index=True)
 
     # just take players which play in english clubs

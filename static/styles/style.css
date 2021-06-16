@@ -62,12 +62,19 @@ div.tooltip {
     border-radius: 8px;
     pointer-events: none;
     visibility: hidden;
-    width: 180px;
-    height: 130px;
 }
 
-.tooltip-line {
-    align-self: start;
+.tooltip-small {
+    width: 80px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tooltip-big {
+    width: 180px;
+    height: 130px;
 }
 
 .svg-inline--fa {

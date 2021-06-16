@@ -1,6 +1,10 @@
 const mapWidth = 800;
 const mapHeight = 500;
+const chartWidth = 500;
+const chartHeight = 500;
+const scalingMultiplicator = 10;
 
+let allSeasons = undefined;
 let selectedSeason = '2016/17';
 let selectedTeam = 'Arsenal';
 let selectedCountries = [];
@@ -36,7 +40,7 @@ const highlightPlayers = function(countryCode) {
     d3.selectAll('.player').each(
         function(d) {
             if (d.nationality, d.nationality === countryCode) {
-                d3.select(this).attr('style', 'text-decoration: underline;')
+                d3.select(this).attr('style', 'text-decoration: underline;');
             }
         }
     )
@@ -46,9 +50,24 @@ const undoHighlightPlayers = function(countryCode) {
     undoHighlightCountry(countryCode)
     d3.selectAll('.player').each(
         function(d) {
-            d3.select(this).attr('style', '')
+            d3.select(this).attr('style', '');
         }
     )
+}
+
+const highlightTeam = function() {
+    d3.selectAll('.team').each(
+        function(d) {
+            d3.select(this).attr('style', function(d) {
+                if (d.Team === selectedTeam) {
+                    return 'text-decoration: underline;';
+                }
+                else {
+                    return '';
+                }
+            });
+        }
+    );
 }
 
 const paintCountries = function() {
@@ -67,6 +86,24 @@ const paintCountries = function() {
 }
 
 function initMap() {
+
+    let tooltipCountry = d3.select('body').append('div')
+        .attr('class', 'tooltip tooltip-small');
+
+    const showCountryTooltip = function(countryName) {
+        const textbox = tooltipCountry
+            .style('visibility', 'visible')
+            .style('left', (d3.event.pageX + 20) + 'px')
+            .style('top', (d3.event.pageY + 20) + 'px');
+        textbox.append('text')
+            .text(countryName);
+    };
+
+    const hideCountryTooltip = function() {
+        tooltipCountry.selectAll('text').remove();
+        tooltipCountry.style('visibility', 'hidden');
+    };
+
     // loads the world map as topojson
     d3.json("../static/data/world-topo.json").then(function (countries) {
 
@@ -105,19 +142,90 @@ function initMap() {
                 }
             })
             .on('mouseover', function(d) {
+                showCountryTooltip(d.properties.admin);
                 highlightPlayers(d.properties.admin);
             })
             .on('mouseout', function(d) {
+                hideCountryTooltip(d.properties.admin);
                 undoHighlightPlayers(d.properties.admin);
             });
     });
 }
 
+function initScatterplot(seasonData) {
+    seasonDataOfSelectedTeam = seasonData.filter(e => e.HomeTeam === selectedTeam);
+
+    let tooltipChart = d3.select('body').append('div')
+        .attr('class', 'tooltip tooltip-small');
+
+    const showChartTooltip = function(text) {
+        const textbox = tooltipChart
+            .style('visibility', 'visible')
+            .style('left', (d3.event.pageX + 20) + 'px')
+            .style('top', (d3.event.pageY + 20) + 'px');
+        textbox.append('text')
+            .text(text);
+    };
+
+    const hideChartTooltip = function() {
+        tooltipChart.selectAll('text').remove();
+        tooltipChart.style('visibility', 'hidden');
+    };
+
+    const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = (width/2);
+    const line_zero_height = (height/2);
+
+    var svg = d3.select('#svg_chart') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .domain(d3.extent(seasonData.map(e => e.WHH)))
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([-2, 2])
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    d3.selectAll('circle').remove();
+
+    svg.selectAll('dot')
+        .data(seasonData).enter()
+        .append('circle')
+        .attr('cx', d => d.WHH*50)
+        .attr('cy', d => {
+            return d.FTR*-115 + line_zero_height})
+        .attr('r', d => d.HomeTeam === selectedTeam ? 6 : 3)
+        .attr('opacity', 0.5)
+        .attr('fill', d => d.HomeTeam === selectedTeam ? 'red' : 'black')
+        .on('mouseover', function(d) {
+             const winstring = d.FTR === 1 ? 'won' : d.FTR === -1 ? 'lost' : 'draw'
+             showChartTooltip(d.HomeTeam + ' ' + winstring + ' on ' + d.WHH);
+        })
+        .on('mouseout', function(d) {
+             hideChartTooltip();
+        });
+}
+
 function initSeasons(seasons, standings) {
-    seasons = Object.values(JSON.parse(seasons));
+    allSeasons = Object.values(JSON.parse(seasons));
     standings = Object.values(JSON.parse(standings));
 
-    const seasons_values = [...new Set(seasons.map(e => e.Season))];
+    const seasons_values = [...new Set(allSeasons.map(e => e.Season))];
     let seasons_values_sub = seasons_values.filter(e => {
         return parseInt(e.split('/')[0]) <= MAX_SEASON;
     });
@@ -135,7 +243,6 @@ function initSeasons(seasons, standings) {
         .on('change', function(d) {
             updateStandings(standings, d3.select(this).property('value'));
         });
-
 }
 
 function updateTeam(team) {
@@ -146,10 +253,11 @@ function updateTeam(team) {
     });
     selectedCountries = [...new Set(players_sub.map(e => e.nationality))];
     paintCountries();
+    highlightTeam();
 
     d3.select('#players').selectAll('*').remove();
     let tooltipPlayer = d3.select('body').append('div')
-    .attr('class', 'tooltip')
+        .attr('class', 'tooltip tooltip-big');
 
     const showPlayerTooltip = function(player) {
         const textbox = tooltipPlayer
@@ -237,9 +345,13 @@ function updateStandings(standings, seasonSelection) {
     d3.select('#standings').selectAll('li')
         .data(standings_sub).enter()
         .append('li')
-        .text(function(d,i) {
-            return (i+1) + '. ' + d.Team;
-        })
+            .attr('class','team')
+            .text(function(d,i) {
+                return (i+1) + '. ' + d.Team;
+            });
+
+    highlightTeam();
+    initScatterplot(allSeasons.filter(e => e.Season === selectedSeason));
 }
 
 function initTeams(standings, player) {
