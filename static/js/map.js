@@ -180,6 +180,9 @@ function initScatterplot(seasonData) {
     const line_zero_width = (width/2);
     const line_zero_height = (height/2);
 
+    d3.selectAll('circle').remove();
+    d3.selectAll('g').remove();
+
     var svg = d3.select('#svg_chart') .attr("width", chartWidth)
         .attr("height", chartHeight)
         .append("g")
@@ -200,8 +203,6 @@ function initScatterplot(seasonData) {
       .range([ height, 0]);
     svg.append("g")
       .call(d3.axisLeft(y));
-
-    d3.selectAll('circle').remove();
 
     svg.selectAll('dot')
         .data(seasonData).enter()
@@ -254,6 +255,8 @@ function updateTeam(team) {
     selectedCountries = [...new Set(players_sub.map(e => e.nationality))];
     paintCountries();
     highlightTeam();
+    initScatterplot(allSeasons.filter(e => e.Season === selectedSeason));
+
 
     d3.select('#players').selectAll('*').remove();
     let tooltipPlayer = d3.select('body').append('div')
