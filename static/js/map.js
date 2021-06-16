@@ -181,7 +181,6 @@ function initScatterplot(seasonData) {
     const line_zero_height = (height/2);
 
     d3.selectAll('circle').remove();
-    d3.selectAll('g').remove();
 
     var svg = d3.select('#svg_chart') .attr("width", chartWidth)
         .attr("height", chartHeight)
@@ -191,7 +190,7 @@ function initScatterplot(seasonData) {
 
     // Add X axis
     var x = d3.scaleLinear()
-      .domain(d3.extent(seasonData.map(e => e.WHH)))
+      .domain([1,15])
       .range([ 0, width ]);
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
