@@ -20,14 +20,14 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 @app.route('/')
 def data():
-    loc = r'./static/data/'
-    seasons_folder = r'D:\Documents\Uni\Master\4. Semester\InfoVis\UE\infovisue_lab3_2021\static\data\English Premier League (football) 10 Seasons'
+
+    seasons_folder = 'data/PremierLeague10Seasons/'
 
     #TODO: How it should work without absolute paths:
     #player_data = pd.read_csv(loc + r'player data/players_21.csv')
 
-    player_data = pd.read_csv(r'D:\Documents\Uni\Master\4. Semester\InfoVis\UE\infovisue_lab3_2021\static\data\player data\players_21.csv')
-    standings_data = pd.read_csv(r'D:\Documents\Uni\Master\4. Semester\InfoVis\UE\infovisue_lab3_2021\static\data\English Premier League (football) 10 Seasons\EPLStandings.csv')
+    player_data = pd.read_csv('data/FIFA_player_data/players_21.csv')
+    standings_data = pd.read_csv('data/PremierLeague10Seasons/EPLStandings.csv')
 
     # Get all filenames of seasons
     all_season_files = list(glob.iglob(os.path.join(seasons_folder, 'season*.csv')))
@@ -54,7 +54,7 @@ def data():
     seasons_data = pd.DataFrame()
     for file in all_season_files:
         this_season = pd.read_csv(file, parse_dates=True)
-        this_season['Season'] = seasons_map[file.split('\\')[-1]]
+        this_season['Season'] = seasons_map[os.path.basename(file)]
         this_season['FTR'] = this_season['FTR'].map(FTR_map)
         seasons_data = pd.concat([seasons_data, this_season], ignore_index=True)
 
@@ -69,6 +69,88 @@ def data():
     seasons_map = seasons_data.to_json(orient='index')
     # return the index file and the data
     return render_template("index.html", seasons=json.dumps(seasons_map), player=json.dumps(player_map), standings=json.dumps(standings_map))
+
+
+@app.route('/explore')
+def explore_data():
+
+    loc = 'data/PremierLeague10Seasons/'
+
+    stat_map = {}
+
+    stat_data = pd.read_csv(loc + 'final_dataset.csv')
+
+    stat_map = stat_data.to_dict(orient = 'index')
+
+    return render_template("exploratory.html", data=json.dumps(stat_map))
+
+@app.route('/additional')
+def additional_data():
+
+    loc = 'data/PremierLeague10Seasons/'
+
+    stat_map = {}
+
+    stat_data = pd.read_csv(loc + 'final_dataset.csv')
+
+    stat_map = stat_data.to_dict(orient = 'index')
+
+    return render_template("additional_data.html", data=json.dumps(stat_map))
+
+@app.route('/heatmap')
+def heatmap_data():
+
+    loc = 'data/PremierLeague10Seasons/'
+
+    stat_map = {}
+
+    stat_data = pd.read_csv(loc + 'final_dataset.csv')
+
+    stat_map = stat_data.to_dict(orient = 'index')
+
+    return render_template("heatmaps.html", data=json.dumps(stat_map))
+
+@app.route('/predictor')
+def predictor_data():
+
+    loc = 'data/PremierLeague10Seasons/'
+
+    stat_map = {}
+
+    stat_data = pd.read_csv(loc + 'final_dataset.csv')
+
+    stat_map = stat_data.to_dict(orient = 'index')
+
+    return render_template("predictors.html", data=json.dumps(stat_map))
+
+@app.route('/regular')
+def regular_data():
+
+    loc = 'data/PremierLeague10Seasons/'
+
+    stat_map = {}
+
+    stat_data = pd.read_csv(loc + 'final_dataset.csv')
+
+    stat_map = stat_data.to_dict(orient = 'index')
+
+    return render_template("regular_exploration.html", data=json.dumps(stat_map))
+
+@app.route('/outcome')
+def outcome_data():
+
+    loc = 'data/PremierLeague10Seasons/'
+
+    stat_map = {}
+
+    stat_data = pd.read_csv(loc + 'final_dataset.csv')
+
+    stat_map = stat_data.to_dict(orient = 'index')
+
+    print(str(stat_map))
+
+    return render_template("outcome_exploration.html", data=json.dumps(stat_map))
+
 
 
 def createPCA(data):

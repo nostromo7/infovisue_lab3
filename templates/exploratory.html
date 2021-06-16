@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>InfoVis UE 2021</title>
+
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.0/topojson.min.js"></script>
+    <script src="{{url_for('static',filename='js/map.js')}}"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top navbar-left">
+  <div class="container-fluid ">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">PremierLeaguePredictor</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="../">Home</a></li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Exploration
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="../regular">Regular Correlations</a></li>
+          <li><a href="../explore">Advance statistic correlatons</a></li>
+          <li><a href="../outcome">Outcome correlations</a></li>
+        </ul>
+      </li>
+      <li><a href="../heatmap">Heatmaps</a></li>
+      <li><a href="../predictor">Predictor</a></li>
+      <li><a href="../additional">Additional Data</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Column 1</h3>
+      <p>Lorem ipsum dolor..</p>
+    </div>
+    <div class="col-sm-4">
+      <h3>Column 2</h3>
+      <p>Lorem ipsum dolor..</p>
+    </div>
+    <div class="col-sm-4">
+      <h3>Column 3</h3> 
+      <p>Lorem ipsum dolor..</p>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Premier League Soccer Match Outcome Prediction Data Analysis</a>
+    </div>
+    <ul class="nav navbar-nav">
+    </ul>
+  </div>
+</nav>
+
+
+<script>
+    // reads the data from the server using Jinja2
+    let data = {{ data | safe }};
+    
+    //console.log(data);
+    //console.log(pca_data);
+
+    // calls the world map rendering
+    initMap(data, idmap);
+
+</script>
+
+</body>
+</html>
