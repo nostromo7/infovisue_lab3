@@ -78,11 +78,27 @@ def explore_data():
 
     stat_map = {}
 
+    graph_leaguepos_goals_scor = {}
+    graph_leaguepos_goals_conc = {}
+    graph_league_diff_goal_diff = {}
+    graph_formdiff_goals_diff = {}
+    graph_form_diff_pts_diff = {}
+    graph_home_goal_diff_goal_scored = {}
+    graph_away_goal_diff_goal_scored = {}
+
     stat_data = pd.read_csv(loc + 'final_dataset.csv')
 
-    stat_map = stat_data.to_dict(orient = 'index')
+    stat_map = stat_data.to_dict()
 
-    return render_template("exploratory.html", data=json.dumps(stat_map))
+    data1 = {'xa' : stat_map['HomeTeamLP'], 'ya' : stat_map['FTHG']}
+    data2 = {'xa' : stat_map['HomeTeamLP'], 'ya' : stat_map['FTAG']}
+    data3 = {'xa' : stat_map['DiffLP'], 'ya' : stat_map['DiffFormPts']}
+    data4 = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTHG']}
+    data5 = {'xa' : stat_map['DiffFormPts'], 'ya' : stat_map['DiffPts']}
+    data6 = {'xa' : stat_map['HTGD'], 'ya' : stat_map['FTHG']}
+
+
+    return render_template("exploratory.html", data1=json.dumps(data1),data2=json.dumps(data2), data3=json.dumps(data3), data4=json.dumps(data4), data5=json.dumps(data5), data6=json.dumps(data6))
 
 @app.route('/additional')
 def additional_data():
@@ -121,7 +137,7 @@ def predictor_data():
 
     stat_map = stat_data.to_dict(orient = 'index')
 
-    return render_template("predictors.html", data=json.dumps(stat_map))
+    return render_template("predictor.html", data=json.dumps(stat_map))
 
 @app.route('/regular')
 def regular_data():
@@ -143,14 +159,82 @@ def outcome_data():
 
     stat_map = {}
 
+    graph_map_form = {}
+    graph_map_3streak = {}
+    graph_map_5_streak = {}
+    graph_map_form_goals_scored = {}
+    graph_map_form_goals_conceded = {} 
+
+
     stat_data = pd.read_csv(loc + 'final_dataset.csv')
 
-    stat_map = stat_data.to_dict(orient = 'index')
+    stat_map = stat_data.to_dict()
 
-    print(str(stat_map))
 
-    return render_template("outcome_exploration.html", data=json.dumps(stat_map))
+    data8 = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTR']}
+    data9 = {'xa' : stat_map['HTWinStreak3'], 'ya' : stat_map['FTR']}
+    data10 = {'xa' : stat_map['HTWinStreak5'], 'ya' : stat_map['FTR']}
+    data11 = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTHG']}
+    data12 = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTAG']}
 
+    #createVisualisations(data11)
+
+    return render_template("outcome_exploration.html", data8=json.dumps(data8),data9=json.dumps(data9), data10=json.dumps(data10), data11=json.dumps(data11), data12=json.dumps(data12))
+
+
+def createVisualisations(data):
+
+    # definitions for the axes
+    left, width = 0.1, 0.75
+    bottom, height = 0.1, 0.75
+    spacing = 0.005
+
+
+    rect_scatter = [left, bottom, width, height]
+    rect_histx = [left, bottom + height + spacing, width, 0.2]
+    rect_histy = [left + width + spacing, bottom, 0.2, height]
+
+    # start with a square Figure
+    fig = plt.figure(figsize=(8, 8))
+
+    ax = fig.add_axes(rect_scatter)
+    ax_histx = fig.add_axes(rect_histx, sharex=ax)
+    ax_histy = fig.add_axes(rect_histy, sharey=ax)
+
+    # LOAD THE DATA INTO THE PLOT
+    x_axis_data =  list(data['xa'].values())
+    y_axis_data = list(data['ya'].values())
+
+    #print(x_axis_data)
+    #print(y_axis_data)
+
+    ax.set_xlabel('Home Time Points')
+    ax.set_ylabel('FTR')
+
+    ax_histx.tick_params(axis="x", labelbottom=False)
+    ax_histy.tick_params(axis="y", labelleft=False)
+
+    # the scatter plot:
+    ax.scatter(x_axis_data, y_axis_data)
+
+    # now determine nice limits by hand:
+    #binwidth = 0.25
+    #xmax = np.max(x_axis_data)
+    #xmin = np.min(x_axis_data)
+    #ymax = np.max(y_axis_data)
+    #ymin = np.min(y_axis_data)
+
+    #x_bins = np.arange(xmin, xmax  + binwidth, binwidth)
+    #y_bins = np.arange(ymin, ymax + binwidth, binwidth)
+
+    #ax_histx.hist(x_axis_data, bins= x_bins)
+    #ax_histy.hist(y_axis_data, bins= y_bins, orientation='horizontal')
+
+    #plt.show()
+
+    #plt.savefig("HTPvsFTR.png")
+
+    return 
 
 
 def createPCA(data):
@@ -203,4 +287,72 @@ def createPCA(data):
     return (pca_df, loadings_df, idmap, indicators)
 
 if __name__ == '__main__':
+
+    loc = 'data/PremierLeague10Seasons/'
+
+    stat_map = {}
+
+    stat_data = pd.read_csv(loc + 'final_dataset.csv')
+
+    stat_map = stat_data.to_dict()
+
+    
+    #data = {'xa' : stat_map['HomeTeamLP'], 'ya' : stat_map['FTHG']}
+    #data = {'xa' : stat_map['HomeTeamLP'], 'ya' : stat_map['FTAG']}
+    #data = {'xa' : stat_map['DiffLP'], 'ya' : stat_map['DiffFormPts']}
+    #data = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTHG']}
+    #data = {'xa' : stat_map['DiffFormPts'], 'ya' : stat_map['DiffPts']}
+    data = {'xa' : stat_map['HTGD'], 'ya' : stat_map['FTHG']}
+
+    # definitions for the axes
+    left, width = 0.1, 0.75
+    bottom, height = 0.1, 0.75
+    spacing = 0.005
+
+
+    rect_scatter = [left, bottom, width, height]
+    rect_histx = [left, bottom + height + spacing, width, 0.2]
+    rect_histy = [left + width + spacing, bottom, 0.2, height]
+
+    # start with a square Figure
+    fig = plt.figure(figsize=(8, 8))
+
+    ax = fig.add_axes(rect_scatter)
+    ax_histx = fig.add_axes(rect_histx, sharex=ax)
+    ax_histy = fig.add_axes(rect_histy, sharey=ax)
+
+    # LOAD THE DATA INTO THE PLOT
+    x_axis_data =  list(data['xa'].values())
+    y_axis_data = list(data['ya'].values())
+
+    #print(x_axis_data)
+    #print(y_axis_data)
+
+    ax.set_xlabel('HTGD')
+    ax.set_ylabel('FTGH')
+
+    ax_histx.tick_params(axis="x", labelbottom=False)
+    ax_histy.tick_params(axis="y", labelleft=False)
+
+    # the scatter plot:
+    ax.scatter(x_axis_data, y_axis_data)
+
+    # now determine nice limits by hand:
+    binwidth = 0.25
+    xmax = np.max(x_axis_data)
+    xmin = np.min(x_axis_data)
+    ymax = np.max(y_axis_data)
+    ymin = np.min(y_axis_data)
+
+    x_bins = np.arange(xmin, xmax  + binwidth, binwidth)
+    y_bins = np.arange(ymin, ymax + binwidth, binwidth)
+
+    ax_histx.hist(x_axis_data, bins= x_bins)
+    ax_histy.hist(y_axis_data, bins= y_bins, orientation='horizontal')
+
+    plt.show()
+
+    plt.savefig("static/data/HTPvsFTR.png")
+
+
     app.run()

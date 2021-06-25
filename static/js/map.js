@@ -379,6 +379,454 @@ function initTeams(standings, player) {
    updateStandings(standings, selectedSeason);
 }
 
-function initPlayers() {
+function initPlayers(selectedTeam) {
     updateTeam(selectedTeam)
 }
+
+
+function initGraph1(xydata) {
+     const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = 20;
+    const line_zero_height = (height/2);
+
+    d3.selectAll('circle').remove();
+
+    var svg = d3.select('#svg_chart_1') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    svg.selectAll('dot')
+        .data(xydata).enter()
+        .append('circle')
+        .attr('cx', d => d.xa*50 + line_zero_width)
+        .attr('cy', d => {console.log(d.ya); return (d.ya*50 + line_zero_height); })
+        .attr('r', 3)
+        .attr('opacity', 0.5)
+        .attr('fill', 'red');
+}
+
+function initGraph2(xydata) {
+     const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = (width/3-100);
+    const line_zero_height = (height/2);
+
+    d3.selectAll('circle').remove();
+
+    var svg = d3.select('#svg_chart_2') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    svg.selectAll('dot')
+        .data(xydata).enter()
+        .append('circle')
+        .attr('cx', d => d.xa*50 + line_zero_width)
+        .attr('cy', d => d.ya*50 + line_zero_height)
+        .attr('r', 3)
+        .attr('opacity', 0.5)
+        .attr('fill', 'red');
+}
+
+function initGraph3(xydata) {
+     const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = (width*2/3);
+    const line_zero_height = (height/2);
+
+    d3.selectAll('circle').remove();
+
+    var svg = d3.select('#svg_chart_3') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    svg.selectAll('dot')
+        .data(xydata).enter()
+        .append('circle')
+        .attr('cx', d => d.xa*50 + line_zero_width)
+        .attr('cy', d => d.ya*50 + line_zero_height)
+        .attr('r', 3)
+        .attr('opacity', 0.5)
+        .attr('fill', 'red');
+}
+
+function initGraph4(xydata) {
+     const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = (20);
+    const line_zero_height = (100);
+
+    d3.selectAll('circle').remove();
+
+    var svg = d3.select('#svg_chart_4') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    svg.selectAll('dot')
+        .data(xydata).enter()
+        .append('circle')
+        .attr('cx', d => d.xa*50 + line_zero_width)
+        .attr('cy', d => d.ya*50 + line_zero_height)
+        .attr('r', 3)
+        .attr('opacity', 0.5)
+        .attr('fill', 'red');
+}
+
+function initGraph5(xydata) {
+     const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = (width/3);
+    const line_zero_height = (100);
+
+    d3.selectAll('circle').remove();
+
+    var svg = d3.select('#svg_chart_5') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    svg.selectAll('dot')
+        .data(xydata).enter()
+        .append('circle')
+        .attr('cx', d => d.xa*50 + line_zero_width)
+        .attr('cy', d => d.ya*50 + line_zero_height)
+        .attr('r', 3)
+        .attr('opacity', 0.5)
+        .attr('fill', 'red');
+}
+
+function initGraph6(xydata) {
+     const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = (width*2/3);
+    const line_zero_height = (100);
+
+    d3.selectAll('circle').remove();
+
+    var svg = d3.select('#svg_chart_6') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    svg.selectAll('dot')
+        .data(xydata).enter()
+        .append('circle')
+        .attr('cx', d => d.xa*50 + line_zero_width)
+        .attr('cy', d => d.ya*50 + line_zero_height)
+        .attr('r', 3)
+        .attr('opacity', 0.5)
+        .attr('fill', 'red');
+}
+
+function initGraph7(xydata) {
+     
+}
+
+function initGraph8(xydata) {
+     const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = (50);
+    const line_zero_height = (height/2);
+
+    d3.selectAll('circle').remove();
+
+    var svg = d3.select('#svg_chart_8') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    svg.selectAll('dot')
+        .data(xydata).enter()
+        .append('circle')
+        .attr('cx', d => d.xa*50 + line_zero_width)
+        .attr('cy', d => d.ya*50 + line_zero_height)
+        .attr('r', 3)
+        .attr('opacity', 0.5)
+        .attr('fill', 'red');
+}
+
+function initGraph9(xydata) {
+     const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = (width/3);
+    const line_zero_height = (height/2);
+
+    d3.selectAll('circle').remove();
+
+    var svg = d3.select('#svg_chart_9') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    svg.selectAll('dot')
+        .data(xydata).enter()
+        .append('circle')
+        .attr('cx', d => d.xa*50 + line_zero_width)
+        .attr('cy', d => d.ya*50 + line_zero_height)
+        .attr('r', 3)
+        .attr('opacity', 0.5)
+        .attr('fill', 'red');
+}
+
+function initGraph10(xydata) {
+     const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = (width*2/3);
+    const line_zero_height = (height/2);
+
+    d3.selectAll('circle').remove();
+
+    var svg = d3.select('#svg_chart_10') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    svg.selectAll('dot')
+        .data(xydata).enter()
+        .append('circle')
+        .attr('cx', d => d.xa*50 + line_zero_width)
+        .attr('cy', d => d.ya*50 + line_zero_height)
+        .attr('r', 3)
+        .attr('opacity', 0.5)
+        .attr('fill', 'red');
+}
+
+function initGraph11(xydata) {
+     const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = (20);
+    const line_zero_height = (100);
+
+    d3.selectAll('circle').remove();
+
+    var svg = d3.select('#svg_chart_11') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    svg.selectAll('dot')
+        .data(xydata).enter()
+        .append('circle')
+        .attr('cx', d => d.xa*50 + line_zero_width)
+        .attr('cy', d => d.ya*50 + line_zero_height)
+        .attr('r', 3)
+        .attr('opacity', 0.5)
+        .attr('fill', 'red');
+}
+
+function initGraph12(xydata) {
+    
+    const margin = {top: 20, right: 20, bottom: 20, left:30},
+        width = chartWidth - margin.left - margin.right,
+        height = chartHeight - margin.top - margin.bottom;
+
+    // define 0,0 of graph
+    const line_zero_width = (width/3);
+    const line_zero_height = (100);
+
+    d3.selectAll('circle').remove();
+
+    var svg = d3.select('#svg_chart_12') .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis
+    var x = d3.scaleLinear()
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    svg.selectAll('dot')
+        .data(xydata).enter()
+        .append('circle')
+        .attr('cx', d => d.xa*50 + line_zero_width)
+        .attr('cy', d => d.ya*50 + line_zero_height)
+        .attr('r', 3)
+        .attr('opacity', 0.5)
+        .attr('fill', 'red');
+        
+}
+

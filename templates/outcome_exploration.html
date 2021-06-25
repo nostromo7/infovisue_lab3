@@ -23,7 +23,6 @@
 </head>
 <body>
 
-
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -48,24 +47,50 @@
 </nav>
 
 
+
 <div class="container">
   <div class="row">
     <div class="col-sm-4">
-      <h3>Column 1</h3>
-      <p>Lorem ipsum dolor..</p>
+         <div class="column-container">
+            
+            <svg id="svg_chart_8"></svg>
+            <span>Form points vs. Next Game Win/Lose</span>
+        </div>
     </div>
     <div class="col-sm-4">
-      <h3>Column 2</h3>
-      <p>Lorem ipsum dolor..</p>
+         <div class="column-container">
+            
+            <svg id="svg_chart_9"></svg>
+            <span>3 streak win vs. Next Game Win/Lose</span>
+        </div>
     </div>
     <div class="col-sm-4">
-      <h3>Column 3</h3> 
-      <p>Lorem ipsum dolor..</p>
+       <div class="column-container">
+            
+            <svg id="svg_chart_10"></svg>
+            <span>5 streak win vs. Next Game Win/Lose</span>
+            
+        </div>
     </div>
   </div>
-</div>
+  <div class="row">
+    <div class="col-sm-6">
+         <div class="column-container">
+            <span>Team form points vs. Goals scored</span>
+            <svg id="svg_chart_11"></svg>
+        </div>
+    </div>
+    <div class="col-sm-6">
+         <div class="column-container">
+            <span>Team form vs. Goals conceded</span>
+            <svg id="svg_chart_12"></svg>
+            
+        </div>
+    </div>
+  
+  </div>
 
-<nav class="navbar navbar-inverse navbar-fixed-bottom">
+  <nav class="navbar navbar-inverse navbar-fixed-bottom">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">Premier League Soccer Match Outcome Prediction Data Analysis</a>
@@ -73,20 +98,29 @@
     <ul class="nav navbar-nav">
     </ul>
   </div>
-</nav>
+  </nav>
+</div>
+
+
 
 
 <script>
     // reads the data from the server using Jinja2
-    let data = {{ data | safe }};
+    let data8 = {{ data8 | safe }};
+    let data9 = {{ data9 | safe }};
+    let data10 = {{ data10 | safe }};
+    let data11 = {{ data11 | safe }};
+    let data12 = {{ data12 | safe }};
+
     
-    //console.log(data);
-    //console.log(pca_data);
 
-    // calls the world map rendering
-    initMap(data, idmap);
+    //console.log(data8);
 
-
+    initGraph8(data8);
+    initGraph9(data9);
+    initGraph10(data10);
+    initGraph11(data11);
+    initGraph12(data12);
 
 </script>
 
