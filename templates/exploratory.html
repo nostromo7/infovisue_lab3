@@ -53,53 +53,54 @@
     <div class="col-sm-4">
          <div class="column-container">
             
-            <svg id="svg_chart_1"></svg>
+            <img src="../static/data/plot_imgs/HomeTeamLPvsFTHG.png" alt="PIC1">
             <span>League position vs. Goals Scored</span>
+
         </div>
     </div>
     <div class="col-sm-4">
          <div class="column-container">
             
-            <svg id="svg_chart_2"></svg>
+            <img src="../static/data/plot_imgs/HomeTeamLPvsFTAG.png" alt="PIC2">
             <span>League position vs. Goals Conceded</span>
+
         </div>
     </div>
     <div class="col-sm-4">
        <div class="column-container">
             
-            <svg id="svg_chart_3"></svg>
+            <img src="../static/data/plot_imgs/DiffLPvsDiffForm.png" alt="PIC3">
             <span>League position difference vs. Form difference</span>
+
         </div>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-4">
          <div class="column-container">
-             <span>Form points vs. Goals Scored</span>
-            <svg id="svg_chart_4"></svg>
+            
+            <span>Form points vs. Goals Scored</span>
+            <img src="../static/data/plot_imgs/FormvsGoals.png" alt="PIC4">
            
         </div>
     </div>
     <div class="col-sm-4">
          <div class="column-container">
+            
             <span>Form points difference vs. Points difference</span>
-            <svg id="svg_chart_5"></svg>
+            <img src="../static/data/plot_imgs/FormPointsvsPoints.png" alt="PIC5">
             
         </div>
     </div>
     <div class="col-sm-4">
        <div class="column-container">
-           <span>Home goal avg. vs. Home goals scored</span>
-            <svg id="svg_chart_6"></svg>
+          
+          <span>Home goal avg. vs. Home goals scored</span>
+          <img src="../static/data/plot_imgs/GoalDiffvsGoalsScored.png" alt="PIC6">
              
         </div>
     </div>
-    <!--<div class="col-sm-4">
-       <div class="column-container">
-            <span>Away goal avg. vs. Away goals scored</span>
-            <svg id="svg_chart_7"></svg>
-        </div>
-    </div>-->
+
   </div>
 
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
@@ -118,23 +119,6 @@
 
 
 <script>
-    // reads the data from the server using Jinja2
-    let data1 = {{ data1 | safe }};
-    let data2 = {{ data2 | safe }};
-    let data3 = {{ data3 | safe }};
-    let data4 = {{ data4 | safe }};
-    let data5 = {{ data5 | safe }};
-    let data6 = {{ data6 | safe }};
-    
-
-    //console.log(data1);
-
-    initGraph1(data1);
-    initGraph2(data2);
-    initGraph3(data3);
-    initGraph4(data4);
-    initGraph5(data5);
-    initGraph6(data6);
 
 </script>
 

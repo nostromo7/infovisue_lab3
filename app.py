@@ -74,31 +74,8 @@ def data():
 @app.route('/explore')
 def explore_data():
 
-    loc = 'data/PremierLeague10Seasons/'
 
-    stat_map = {}
-
-    graph_leaguepos_goals_scor = {}
-    graph_leaguepos_goals_conc = {}
-    graph_league_diff_goal_diff = {}
-    graph_formdiff_goals_diff = {}
-    graph_form_diff_pts_diff = {}
-    graph_home_goal_diff_goal_scored = {}
-    graph_away_goal_diff_goal_scored = {}
-
-    stat_data = pd.read_csv(loc + 'final_dataset.csv')
-
-    stat_map = stat_data.to_dict()
-
-    data1 = {'xa' : stat_map['HomeTeamLP'], 'ya' : stat_map['FTHG']}
-    data2 = {'xa' : stat_map['HomeTeamLP'], 'ya' : stat_map['FTAG']}
-    data3 = {'xa' : stat_map['DiffLP'], 'ya' : stat_map['DiffFormPts']}
-    data4 = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTHG']}
-    data5 = {'xa' : stat_map['DiffFormPts'], 'ya' : stat_map['DiffPts']}
-    data6 = {'xa' : stat_map['HTGD'], 'ya' : stat_map['FTHG']}
-
-
-    return render_template("exploratory.html", data1=json.dumps(data1),data2=json.dumps(data2), data3=json.dumps(data3), data4=json.dumps(data4), data5=json.dumps(data5), data6=json.dumps(data6))
+    return render_template("exploratory.html")
 
 @app.route('/additional')
 def additional_data():
@@ -155,31 +132,7 @@ def regular_data():
 @app.route('/outcome')
 def outcome_data():
 
-    loc = 'data/PremierLeague10Seasons/'
-
-    stat_map = {}
-
-    graph_map_form = {}
-    graph_map_3streak = {}
-    graph_map_5_streak = {}
-    graph_map_form_goals_scored = {}
-    graph_map_form_goals_conceded = {} 
-
-
-    stat_data = pd.read_csv(loc + 'final_dataset.csv')
-
-    stat_map = stat_data.to_dict()
-
-
-    data8 = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTR']}
-    data9 = {'xa' : stat_map['HTWinStreak3'], 'ya' : stat_map['FTR']}
-    data10 = {'xa' : stat_map['HTWinStreak5'], 'ya' : stat_map['FTR']}
-    data11 = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTHG']}
-    data12 = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTAG']}
-
-    #createVisualisations(data11)
-
-    return render_template("outcome_exploration.html", data8=json.dumps(data8),data9=json.dumps(data9), data10=json.dumps(data10), data11=json.dumps(data11), data12=json.dumps(data12))
+    return render_template("outcome_exploration.html")
 
 
 def createVisualisations(data):
@@ -302,11 +255,18 @@ if __name__ == '__main__':
     #data = {'xa' : stat_map['DiffLP'], 'ya' : stat_map['DiffFormPts']}
     #data = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTHG']}
     #data = {'xa' : stat_map['DiffFormPts'], 'ya' : stat_map['DiffPts']}
+    #data = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTR']}
+    #data = {'xa' : stat_map['HTWinStreak3'], 'ya' : stat_map['FTR']}
+    #data = {'xa' : stat_map['HTWinStreak5'], 'ya' : stat_map['FTR']}
+    #data = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTHG']}
+    #data = {'xa' : stat_map['HTFormPts'], 'ya' : stat_map['FTAG']}
     data = {'xa' : stat_map['HTGD'], 'ya' : stat_map['FTHG']}
 
+
+
     # definitions for the axes
-    left, width = 0.1, 0.75
-    bottom, height = 0.1, 0.75
+    left, width = 0.1, 0.6
+    bottom, height = 0.2, 0.5
     spacing = 0.005
 
 
@@ -328,8 +288,8 @@ if __name__ == '__main__':
     #print(x_axis_data)
     #print(y_axis_data)
 
-    ax.set_xlabel('HTGD')
-    ax.set_ylabel('FTGH')
+    ax.set_xlabel('Goal Difference')
+    ax.set_ylabel('Goals Scored')
 
     ax_histx.tick_params(axis="x", labelbottom=False)
     ax_histy.tick_params(axis="y", labelleft=False)
@@ -350,9 +310,9 @@ if __name__ == '__main__':
     ax_histx.hist(x_axis_data, bins= x_bins)
     ax_histy.hist(y_axis_data, bins= y_bins, orientation='horizontal')
 
-    plt.show()
+    #plt.show()
 
-    plt.savefig("static/data/HTPvsFTR.png")
+    plt.savefig("static/data/plot_imgs/GoalDiffvsGoalsScored.png")
 
 
     app.run()

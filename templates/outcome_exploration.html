@@ -21,15 +21,21 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 </head>
+
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<div class = "container">
+
+<nav class="navbar navbar-inverse navbar-fixed-top navbar-left">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">PremierLeaguePredictor</a>
     </div>
     <ul class="nav navbar-nav">
       <li class="active"><a href="../">Home</a></li>
+      <li><a href="../heatmap">Heatmaps</a></li>
+      <li><a href="../predictor">Predictor</a></li>
+      <li><a href="../additional">Additional Data</a></li>
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Exploration
         <span class="caret"></span></a>
@@ -39,9 +45,7 @@
           <li><a href="../outcome">Outcome correlations</a></li>
         </ul>
       </li>
-      <li><a href="../heatmap">Heatmaps</a></li>
-      <li><a href="../predictor">Predictor</a></li>
-      <li><a href="../additional">Additional Data</a></li>
+     
     </ul>
   </div>
 </nav>
@@ -53,21 +57,23 @@
     <div class="col-sm-4">
          <div class="column-container">
             
-            <svg id="svg_chart_8"></svg>
+            <img src="../static/data/plot_imgs/FormPointsvsResult.png" alt="pic7">
             <span>Form points vs. Next Game Win/Lose</span>
+
         </div>
     </div>
     <div class="col-sm-4">
          <div class="column-container">
             
-            <svg id="svg_chart_9"></svg>
+            <img src="../static/data/plot_imgs/HT3StreakvsResult.png" alt="pic8">
             <span>3 streak win vs. Next Game Win/Lose</span>
+
         </div>
     </div>
     <div class="col-sm-4">
        <div class="column-container">
             
-            <svg id="svg_chart_10"></svg>
+            <img src="../static/data/plot_imgs/HT5StreakvsResult.png" alt="pic9">
             <span>5 streak win vs. Next Game Win/Lose</span>
             
         </div>
@@ -76,21 +82,24 @@
   <div class="row">
     <div class="col-sm-6">
          <div class="column-container">
+
             <span>Team form points vs. Goals scored</span>
-            <svg id="svg_chart_11"></svg>
+            <img src="../static/data/plot_imgs/HTFormvsFTHG.png" alt="pic10">
+        
         </div>
     </div>
     <div class="col-sm-6">
          <div class="column-container">
+
             <span>Team form vs. Goals conceded</span>
-            <svg id="svg_chart_12"></svg>
+            <img src="../static/data/plot_imgs/FormvsGoalsConc.png" alt="pic11">
             
         </div>
     </div>
   
   </div>
 
-  <nav class="navbar navbar-inverse navbar-fixed-bottom">
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">Premier League Soccer Match Outcome Prediction Data Analysis</a>
@@ -101,26 +110,10 @@
   </nav>
 </div>
 
-
+</div>
 
 
 <script>
-    // reads the data from the server using Jinja2
-    let data8 = {{ data8 | safe }};
-    let data9 = {{ data9 | safe }};
-    let data10 = {{ data10 | safe }};
-    let data11 = {{ data11 | safe }};
-    let data12 = {{ data12 | safe }};
-
-    
-
-    //console.log(data8);
-
-    initGraph8(data8);
-    initGraph9(data9);
-    initGraph10(data10);
-    initGraph11(data11);
-    initGraph12(data12);
 
 </script>
 
