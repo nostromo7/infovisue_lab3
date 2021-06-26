@@ -8,7 +8,7 @@ body {
 .container {
     display: table-cell;
     vertical-align:top;
-    height: 500px;
+    height: 70px;
     padding: 10px;
     border: 0px solid black;
     text-align: center;

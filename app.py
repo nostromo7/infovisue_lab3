@@ -73,8 +73,6 @@ def data():
 
 @app.route('/explore')
 def explore_data():
-
-
     return render_template("exploratory.html")
 
 @app.route('/additional')
